@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,6 +20,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'poste',
+        'departement_id',
     ];
 
     /**
@@ -45,4 +46,31 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Relation avec la table `absences`
+    public function absences()
+    {
+        return $this->hasMany(Absence::class);
+    }
+
+    // Relation avec la table `departements` : un utilisateur appartient à un département
+    public function departement()
+    {
+        return $this->belongsTo(Departement::class);
+    }
+
+    /**
+     * Relation inverse : un utilisateur peut être le chef de plusieurs départements
+     * Chaque utilisateur peut être chef de plusieurs départements via la clé `chef_id`
+     */
+    public function departementsAsChef()
+    {
+        return $this->hasMany(Departement::class, 'chef_id');
+    }
+
+    public function historiquePersonnels()
+    {
+    return $this->hasMany(HistoriquePersonnel::class);
+    }
+
 }

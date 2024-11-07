@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateHistoriquePersonnelsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('historique_personnels', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('changement');
+            $table->timestamp('date_changement');
+            $table->string('type_changement');
             $table->timestamps();
+
+            // Clé étrangère vers la table users
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -24,4 +31,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('historique_personnels');
     }
-};
+}
